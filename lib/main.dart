@@ -15,7 +15,7 @@ import 'dart:io';
 final googleSignIn = new GoogleSignIn();
 final analytics = new FirebaseAnalytics();
 final auth = FirebaseAuth.instance;
-final reference = FirebaseDatabase.instance.reference().child('messages');
+final reference = FirebaseDatabase.instance.reference().child('Blog');
 String temp;
 
 void main() => runApp(new HomePage());
@@ -35,7 +35,6 @@ Future<Null> _ensureLoggedIn() async {
       idToken: credentials.idToken,
       accessToken: credentials.accessToken,
     );
-
   }
 }
 
@@ -50,14 +49,36 @@ class HomePageState extends State<HomePage> {
     return new MaterialApp(
       title: "SimpleBlogApp",
       home: new Scaffold(
-        body: new Text("Aaa")
+          body: new Column(children: <Widget>[
+            new Flexible(
+              child: new FirebaseAnimatedList(
+                query: reference,
+                sort: (a, b) => b.key.compareTo(a.key),
+                padding: new EdgeInsets.all(8.0),
+                reverse: false,
+                itemBuilder: (_, DataSnapshot snapshot,
+                    Animation<double> animation, int index) {
+                  return new BlogRow(
+                    snapshot,
+                  );
+                },
+//              itemBuilder: (_, DataSnapshot snapshot, Animation<double> animation) {
+//                return new ChatMessage(
+//                    snapshot: snapshot,
+//                    animation: animation
+//                );
+//              },
+              ),
+            ),
+            new Divider(height: 1.0),
+
+          ])
       ),
     );
   }
 
   Future<Null> checkStatusOfUser() async {
     await _ensureLoggedIn();
-
   }
 
 
@@ -67,4 +88,28 @@ class HomePageState extends State<HomePage> {
     checkStatusOfUser();
   }
 
+}
+
+@override
+class BlogRow extends StatelessWidget {
+  final DataSnapshot snapshot;
+
+  BlogRow(this.snapshot);
+
+  @override
+  Widget build(BuildContext context) {
+    return new Container(
+      child: new Card(
+        child: new Column(children: <Widget>[
+          new Image.network(snapshot.value['IMAGE']),
+          new Text(snapshot.value['Title']),
+          new Text(snapshot.value['DESCRIPTION']),
+          new Text(snapshot.value['username']),
+        ],
+
+        ),
+      ),
+
+    );
+  }
 }
