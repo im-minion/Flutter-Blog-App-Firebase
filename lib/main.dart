@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_blog_app/post_blog_page.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,6 +13,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:math';
 import 'dart:io';
 
+//import 'post_blog_page.dart' as post;
 final googleSignIn = new GoogleSignIn();
 final analytics = new FirebaseAnalytics();
 final auth = FirebaseAuth.instance;
@@ -48,31 +50,37 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return new MaterialApp(
       title: "SimpleBlogApp",
+      routes: <String, WidgetBuilder>{
+        '/post': (BuildContext context) => new PostBlogPage(),
+      },
       home: new Scaffold(
-          body: new Column(children: <Widget>[
-            new Flexible(
-              child: new FirebaseAnimatedList(
-                query: reference,
-                sort: (a, b) => b.key.compareTo(a.key),
-                padding: new EdgeInsets.all(8.0),
-                reverse: false,
-                itemBuilder: (_, DataSnapshot snapshot,
-                    Animation<double> animation, int index) {
-                  return new BlogRow(
-                    snapshot,
-                  );
-                },
-//              itemBuilder: (_, DataSnapshot snapshot, Animation<double> animation) {
-//                return new ChatMessage(
-//                    snapshot: snapshot,
-//                    animation: animation
-//                );
-//              },
+          body: new Container(
+            child: new Column(children: <Widget>[
+              new Flexible(
+                child: new FirebaseAnimatedList(
+                  query: reference,
+                  sort: (a, b) => b.key.compareTo(a.key),
+                  padding: new EdgeInsets.all(8.0),
+                  reverse: false,
+                  itemBuilder: (_, DataSnapshot snapshot,
+                      Animation<double> animation, int index) {
+                    return new BlogRow(
+                      snapshot,
+                    );
+                  },
+                ),
               ),
-            ),
-            new Divider(height: 1.0),
+              new Divider(height: 1.0),
+              new FloatingActionButton(
+                  backgroundColor: Colors.black,
+                  onPressed: () =>
+                      Navigator
+                          .of(context).pushNamed('/post')
 
-          ])
+              ),
+
+            ]),
+          )
       ),
     );
   }
