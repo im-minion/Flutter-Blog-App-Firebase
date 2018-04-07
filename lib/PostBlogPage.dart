@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_blog_app/main.dart' as main;
+import 'package:flutter_blog_app/main.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -13,7 +13,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 final googleSignIn = new GoogleSignIn();
 final analytics = new FirebaseAnalytics();
 final auth = FirebaseAuth.instance;
-final reference = FirebaseDatabase.instance.reference().child('messages');
+final reference = FirebaseDatabase.instance.reference().child('Blogs');
 
 Future<Null> _ensureLoggedIn() async {
   GoogleSignInAccount user = googleSignIn.currentUser;
@@ -126,12 +126,22 @@ class _PostPageState extends State<_PostPage> {
 
   void _addBlog(String title, String description, String imageUrl) {
 //    analytics.logEvent(name: 'post_blog');
-    print(googleSignIn.currentUser.displayName);
-    print(googleSignIn.currentUser.id);
-    print(title);
-    print(imageUrl);
-    print(description);
-
-    Navigator.pop(context);
+//    print(googleSignIn.currentUser.displayName);
+//    print(googleSignIn.currentUser.id);
+//    print(title);
+//    print(imageUrl);
+//    print(description);
+    reference.push().set({
+      'IMAGE': imageUrl,
+      'Title': title,
+      'DESCRIPTION': description,
+      'uid': googleSignIn.currentUser.id,
+      'username': googleSignIn.currentUser.displayName
+    });
+//    Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (Builder)))
+    Navigator.of(context).pushAndRemoveUntil(
+        new MaterialPageRoute(
+            builder: (BuildContext context) => new HomePage()),
+        (Route route) => route == null);
   }
 }

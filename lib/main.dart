@@ -16,7 +16,7 @@ import 'package:flutter_blog_app/PostBlogPage.dart';
 final googleSignIn = new GoogleSignIn();
 final analytics = new FirebaseAnalytics();
 final auth = FirebaseAuth.instance;
-final reference = FirebaseDatabase.instance.reference().child('Blog');
+final reference = FirebaseDatabase.instance.reference().child('Blogs');
 String temp;
 
 void main() => runApp(new HomePage());
