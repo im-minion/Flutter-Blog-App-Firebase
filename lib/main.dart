@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_blog_app/post_blog_page.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,8 +11,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:math';
 import 'dart:io';
+import 'package:flutter_blog_app/PostBlogPage.dart';
 
-//import 'post_blog_page.dart' as post;
 final googleSignIn = new GoogleSignIn();
 final analytics = new FirebaseAnalytics();
 final auth = FirebaseAuth.instance;
@@ -24,15 +23,14 @@ void main() => runApp(new HomePage());
 
 Future<Null> _ensureLoggedIn() async {
   GoogleSignInAccount user = googleSignIn.currentUser;
-  if (user == null)
-    user = await googleSignIn.signInSilently();
+  if (user == null) user = await googleSignIn.signInSilently();
   if (user == null) {
     user = await googleSignIn.signIn();
     analytics.logLogin();
   }
   if (await auth.currentUser() == null) {
     GoogleSignInAuthentication credentials =
-    await googleSignIn.currentUser.authentication;
+        await googleSignIn.currentUser.authentication;
     await auth.signInWithGoogle(
       idToken: credentials.idToken,
       accessToken: credentials.accessToken,
@@ -50,38 +48,40 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return new MaterialApp(
       title: "SimpleBlogApp",
-      routes: <String, WidgetBuilder>{
-        '/post': (BuildContext context) => new PostBlogPage(),
-      },
-      home: new Scaffold(
-          body: new Container(
-            child: new Column(children: <Widget>[
-              new Flexible(
-                child: new FirebaseAnimatedList(
-                  query: reference,
-                  sort: (a, b) => b.key.compareTo(a.key),
-                  padding: new EdgeInsets.all(8.0),
-                  reverse: false,
-                  itemBuilder: (_, DataSnapshot snapshot,
-                      Animation<double> animation, int index) {
-                    return new BlogRow(
-                      snapshot,
-                    );
-                  },
-                ),
+      home: new Scaffold(body: new Builder(builder: (context) {
+        return new Container(
+          child: new Column(children: <Widget>[
+            new Flexible(
+              child: new FirebaseAnimatedList(
+                query: reference,
+                sort: (a, b) => b.key.compareTo(a.key),
+                padding: new EdgeInsets.all(8.0),
+                reverse: false,
+                itemBuilder: (_, DataSnapshot snapshot,
+                    Animation<double> animation, int index) {
+                  return new BlogRow(
+                    snapshot,
+                  );
+                },
               ),
-              new Divider(height: 1.0),
-              new FloatingActionButton(
-                  backgroundColor: Colors.black,
-                  onPressed: () =>
-                      Navigator
-                          .of(context).pushNamed('/post')
-
-              ),
-
-            ]),
-          )
-      ),
+            ),
+//          new Divider(height: 1.0),
+            new FloatingActionButton(
+                backgroundColor: Colors.black,
+                onPressed: () {
+//                setState((){
+//
+//                });
+                  print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+                  Navigator.of(context).push(
+                        new MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                new PostBlogPage()),
+                      );
+                }),
+          ]),
+        );
+      })),
     );
   }
 
@@ -89,13 +89,11 @@ class HomePageState extends State<HomePage> {
     await _ensureLoggedIn();
   }
 
-
   @override
   void initState() {
     super.initState();
     checkStatusOfUser();
   }
-
 }
 
 @override
@@ -108,16 +106,15 @@ class BlogRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return new Container(
       child: new Card(
-        child: new Column(children: <Widget>[
-          new Image.network(snapshot.value['IMAGE']),
-          new Text(snapshot.value['Title']),
-          new Text(snapshot.value['DESCRIPTION']),
-          new Text(snapshot.value['username']),
-        ],
-
+        child: new Column(
+          children: <Widget>[
+            new Image.network(snapshot.value['IMAGE']),
+            new Text(snapshot.value['Title']),
+            new Text(snapshot.value['DESCRIPTION']),
+            new Text(snapshot.value['username']),
+          ],
         ),
       ),
-
     );
   }
 }
