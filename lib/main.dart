@@ -65,14 +65,10 @@ class HomePageState extends State<HomePage> {
                 },
               ),
             ),
-//          new Divider(height: 1.0),
+            new Divider(height: 1.0),
             new FloatingActionButton(
                 backgroundColor: Colors.black,
                 onPressed: () {
-//                setState((){
-//
-//                });
-                  print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
                   Navigator.of(context).push(
                         new MaterialPageRoute(
                             builder: (BuildContext context) =>

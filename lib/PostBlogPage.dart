@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_blog_app/main.dart';
+import 'package:flutter_blog_app/main.dart' as main;
 
 class PostBlogPage extends StatelessWidget {
   @override
