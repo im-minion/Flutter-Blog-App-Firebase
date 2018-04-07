@@ -71,9 +71,9 @@ class _PostPageState extends State<_PostPage> {
           new InkWell(
             child: _image == null
                 ? new Image.asset(
-                    'add.png',
-                    height: 200.0,
-                    width: 200.0,
+                    'assets/img/addbutton.png',
+                    height: 300.0,
+                    width: 300.0,
                     fit: BoxFit.fill,
                   )
                 : new Image.file(
@@ -83,6 +83,7 @@ class _PostPageState extends State<_PostPage> {
                   ),
             onTap: () {
               getImage();
+              _isImage = true;
             },
           ),
           new TextField(
@@ -104,7 +105,7 @@ class _PostPageState extends State<_PostPage> {
             decoration: new InputDecoration.collapsed(hintText: "Description"),
           ),
           new RaisedButton(
-            onPressed: _isTitle && _isDesc
+            onPressed: _isTitle && _isDesc && _isImage
                 ? () => _handleSubmitted(_title.text, _desc.text, _image)
                 : null,
           )
@@ -115,14 +116,11 @@ class _PostPageState extends State<_PostPage> {
 
   Future<Null> _handleSubmitted(String title, String desc, File img) async {
     await _ensureLoggedIn();
-    //upload to Storage and get the download url
 
     StorageReference ref = FirebaseStorage.instance.ref().child("Blog_Images/" +
         new DateTime.now().millisecondsSinceEpoch.toString()); //new
     StorageUploadTask uploadTask = ref.put(img); //new
     Uri downloadUrl = (await uploadTask.future).downloadUrl;
-//    _sendMessage(imageUrl: downloadUrl.toString());
-
     _addBlog(title, desc, downloadUrl.toString());
   }
 
@@ -133,5 +131,7 @@ class _PostPageState extends State<_PostPage> {
     print(title);
     print(imageUrl);
     print(description);
+
+    Navigator.pop(context);
   }
 }
