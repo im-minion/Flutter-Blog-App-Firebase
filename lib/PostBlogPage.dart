@@ -36,9 +36,11 @@ class PostBlogPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-      home: new Scaffold(body: new _PostPage()),
+      home: new Scaffold(
+          body: new _PostPage()),
     );
   }
+
 }
 
 class _PostPage extends StatefulWidget {
@@ -139,9 +141,11 @@ class _PostPageState extends State<_PostPage> {
       'username': googleSignIn.currentUser.displayName
     });
 //    Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (Builder)))
-    Navigator.of(context).pushAndRemoveUntil(
-        new MaterialPageRoute(
-            builder: (BuildContext context) => new HomePage()),
-        (Route route) => route == null);
+//    Navigator.of(context).pushAndRemoveUntil(
+//        new MaterialPageRoute(
+//            builder: (BuildContext context) => new HomePage()),
+//        (Route route) => route == null);
+    Navigator.of(context).pop();
+
   }
 }

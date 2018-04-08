@@ -48,36 +48,60 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return new MaterialApp(
       title: "SimpleBlogApp",
-      home: new Scaffold(body: new Builder(builder: (context) {
-        return new Container(
-          child: new Column(children: <Widget>[
-            new Flexible(
-              child: new FirebaseAnimatedList(
-                query: reference,
-                sort: (a, b) => b.key.compareTo(a.key),
-                padding: new EdgeInsets.all(8.0),
-                reverse: false,
-                itemBuilder: (_, DataSnapshot snapshot,
-                    Animation<double> animation, int index) {
-                  return new BlogRow(
-                    snapshot,
-                  );
-                },
-              ),
-            ),
-            new Divider(height: 1.0),
-            new FloatingActionButton(
-                backgroundColor: Colors.black,
-                onPressed: () {
-                  Navigator.of(context).push(
-                        new MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                new PostBlogPage()),
+      home: new Scaffold(
+          appBar: new AppBar(
+            title: new Text("Simple Blog App"),
+            actions: <Widget>[
+              new Builder(builder: (context) {
+                return new IconButton(
+                    icon: new Icon(Icons.add),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                            new MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    new PostBlogPage()),
+                          );
+                    });
+              }),
+              new Builder(builder: (context) {
+                return new IconButton(
+                    icon: new Icon(Icons.more_vert),
+                    onPressed: () {
+                      print("cllcllcl");
+                    });
+              })
+            ],
+          ),
+          body: new Builder(builder: (context) {
+            return new Container(
+              child: new Column(children: <Widget>[
+                new Flexible(
+                  child: new FirebaseAnimatedList(
+                    query: reference,
+                    sort: (a, b) => b.key.compareTo(a.key),
+                    padding: new EdgeInsets.all(8.0),
+                    reverse: false,
+                    itemBuilder: (_, DataSnapshot snapshot,
+                        Animation<double> animation, int index) {
+                      return new BlogRow(
+                        snapshot,
                       );
-                }),
-          ]),
-        );
-      })),
+                    },
+                  ),
+                ),
+                new Divider(height: 1.0),
+//                new FloatingActionButton(
+//                    backgroundColor: Colors.black,
+//                    onPressed: () {
+//                      Navigator.of(context).push(
+//                            new MaterialPageRoute(
+//                                builder: (BuildContext context) =>
+//                                    new PostBlogPage()),
+//                          );
+//                    }),
+              ]),
+            );
+          })),
     );
   }
 
