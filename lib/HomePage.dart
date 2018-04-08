@@ -8,7 +8,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_blog_app/PostBlogPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_blog_app/ProfilePage.dart';
 
 final googleSignIn = new GoogleSignIn();
@@ -88,7 +87,7 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    Scaffold s = new Scaffold(
+    Scaffold homeScaffold = new Scaffold(
         appBar: new AppBar(
           title: new Text("Simple Blog App"),
           actions: <Widget>[
@@ -141,13 +140,17 @@ class HomePageState extends State<HomePage> {
             new Divider(height: 1.0),
           ]),
         ));
-    Scaffold s1 = new Scaffold(
+    Scaffold loginScaffold = new Scaffold(
       appBar: new AppBar(
         title: new Text("Login"),
       ),
-      body: new RaisedButton(onPressed: () {
-        checkStatusOfUser();
-      }),
+      body: new Center(
+        child: new RaisedButton(
+            onPressed: () {
+              checkStatusOfUser();
+            },
+            child: new Text("Google Sign in..")),
+      ),
     );
 
     return new MaterialApp(
@@ -155,7 +158,7 @@ class HomePageState extends State<HomePage> {
         routes: <String, WidgetBuilder>{
           "/profile": (BuildContext context) => new ProfilePage(),
         },
-        home: loggedIn ? s : s1);
+        home: loggedIn ? homeScaffold : loginScaffold);
   }
 
   @override
