@@ -37,10 +37,12 @@ class PostBlogPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return new MaterialApp(
       home: new Scaffold(
+          appBar: new AppBar(
+            title: new Text('Post Blog..'),
+          ),
           body: new _PostPage()),
     );
   }
-
 }
 
 class _PostPage extends StatefulWidget {
@@ -74,14 +76,14 @@ class _PostPageState extends State<_PostPage> {
             child: _image == null
                 ? new Image.asset(
                     'assets/img/addbutton.png',
-                    height: 300.0,
-                    width: 300.0,
+                    height: 250.0,
+                    width: 250.0,
                     fit: BoxFit.fill,
                   )
                 : new Image.file(
                     _image,
-                    height: 200.0,
-                    width: 200.0,
+                    height: 250.0,
+                    width: 250.0,
                   ),
             onTap: () {
               getImage();
@@ -107,6 +109,7 @@ class _PostPageState extends State<_PostPage> {
             decoration: new InputDecoration.collapsed(hintText: "Description"),
           ),
           new RaisedButton(
+            child: new Text("Post"),
             onPressed: _isTitle && _isDesc && _isImage
                 ? () => _handleSubmitted(_title.text, _desc.text, _image)
                 : null,
@@ -146,6 +149,5 @@ class _PostPageState extends State<_PostPage> {
 //            builder: (BuildContext context) => new HomePage()),
 //        (Route route) => route == null);
     Navigator.of(context).pop();
-
   }
 }
