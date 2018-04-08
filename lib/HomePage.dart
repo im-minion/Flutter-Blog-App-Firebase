@@ -15,7 +15,7 @@ final analytics = new FirebaseAnalytics();
 final auth = FirebaseAuth.instance;
 final reference = FirebaseDatabase.instance.reference().child('Blogs');
 String temp;
-enum _DesignAppMenuItems { profile, logout, cod, ccc }
+enum _DesignAppMenuItems { profile, logout }
 
 class HomePage extends StatefulWidget {
   @override
@@ -115,12 +115,6 @@ class HomePageState extends State<HomePage> {
                         new PopupMenuItem<_DesignAppMenuItems>(
                             value: _DesignAppMenuItems.logout,
                             child: const Text('LOG OUT')),
-                        new PopupMenuItem<_DesignAppMenuItems>(
-                            value: _DesignAppMenuItems.cod,
-                            child: const Text('COD')),
-                        new PopupMenuItem<_DesignAppMenuItems>(
-                            value: _DesignAppMenuItems.ccc,
-                            child: const Text('CCC'))
                       ]);
             })
           ],
@@ -166,7 +160,6 @@ class HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-//    checkStatusOfUser();
     this._function();
   }
 
@@ -175,18 +168,9 @@ class HomePageState extends State<HomePage> {
       case _DesignAppMenuItems.profile:
         print('Profile');
         Navigator.of(context).pushNamed("/profile");
-        //        Navigator
-//            .of(context)
-//            .push(new MaterialPageRoute(builder: (BuildContext context) {
-//          new ProfilePage();
-//        }));
         break;
       case _DesignAppMenuItems.logout:
         logoutUser();
-        break;
-      case _DesignAppMenuItems.cod:
-        break;
-      case _DesignAppMenuItems.ccc:
         break;
     }
   }

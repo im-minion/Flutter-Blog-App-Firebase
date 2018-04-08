@@ -13,6 +13,7 @@ class BlogRow extends StatelessWidget {
       child: new Card(
         child: new Column(
           children: <Widget>[
+//            TODO: add network image with retry
             new Image.network(snapshot.value['IMAGE']),
             new Text(snapshot.value['Title']),
             new Text(snapshot.value['DESCRIPTION']),

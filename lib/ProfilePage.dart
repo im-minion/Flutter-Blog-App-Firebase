@@ -49,6 +49,7 @@ class ProfilePageState extends State<ProfilePage> {
                 padding: const EdgeInsets.all(16.0),
                 child: new CircleAvatar(
                   child: new Image.network(
+//                    TODO: Network image with retry
                     userphotourl,
                     fit: BoxFit.fill,
                     height: 130.0,
