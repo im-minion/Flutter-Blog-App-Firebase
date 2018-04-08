@@ -5,6 +5,7 @@
 // are correct.
 
 import 'package:flutter/material.dart';
+import 'package:flutter_blog_app/HomePage.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:flutter_blog_app/main.dart';
