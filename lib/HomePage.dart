@@ -44,23 +44,9 @@ class HomePageState extends State<HomePage> {
   Future<Null> _ensureLoggedIn() async {
     SharedPreferences prefs;
     prefs = await SharedPreferences.getInstance();
-//
+
     GoogleSignInAccount user = googleSignIn.currentUser;
-//
-//    if (user == null) user = await googleSignIn.signInSilently();
-//    if (user == null) {
-//      user = await googleSignIn.signIn();
-//      analytics.logLogin();
-//    }
-//    if (await auth.currentUser() == null) {
-//      GoogleSignInAuthentication credentials =
-//      await googleSignIn.currentUser.authentication;
-//      await auth.signInWithGoogle(
-//        idToken: credentials.idToken,
-//        accessToken: credentials.accessToken,
-//      );
-//    }
-//    Future<Null> _handleSignIn() async {
+
     try {
       if (user == null) user = await googleSignIn.signInSilently();
       if (user == null) {
@@ -75,27 +61,19 @@ class HomePageState extends State<HomePage> {
           accessToken: credentials.accessToken,
         );
       }
-//      user = await googleSignIn.signIn();
       print(user.displayName);
       prefs.setString("username", user.displayName);
       prefs.setString("userid", user.id);
       prefs.setString("useremail", user.email);
       prefs.setString("userphotourl", user.photoUrl);
       analytics.logLogin();
-//      GoogleSignInAuthentication credentials =
-//          await googleSignIn.currentUser.authentication;
-//      await auth.signInWithGoogle(
-//        idToken: credentials.idToken,
-//        accessToken: credentials.accessToken,
-//      );
+
       this.setState(() {
         loggedIn = true;
       });
-      //also add into DB
     } catch (error) {
       print(error);
     }
-//    }
   }
 
   void _select(Choice choice) {
@@ -117,8 +95,12 @@ class HomePageState extends State<HomePage> {
     }
   }
 
-  void logoutUser() {
+  Future<Null> logoutUser() async {
     //logout user
+    await FirebaseAuth.instance.signOut();
+    this.setState(() {
+      loggedIn = false;
+    });
   }
 
   @override
