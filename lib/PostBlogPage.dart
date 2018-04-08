@@ -91,32 +91,57 @@ class _PostPageState extends State<_PostPage> {
             },
           ),
           new Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(20.0),
             child: new TextField(
               controller: _title,
+              style: new TextStyle(
+                color: Colors.black,
+                fontSize: 18.0,
+              ),
               onChanged: (String text) {
                 setState(() {
                   _isTitle = text.length > 0;
                 });
               },
-              decoration: new InputDecoration.collapsed(hintText: "Title"),
+              decoration: new InputDecoration.collapsed(
+                  hintText: "Title",
+                  border: new UnderlineInputBorder(
+                    borderSide: const BorderSide(
+                        color: Colors.blueAccent,
+                        style: BorderStyle.solid,
+                        width: 5.0),
+                ),
+              ),
             ),
           ),
           new Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(20.0),
             child: new TextField(
               controller: _desc,
+              style: new TextStyle(
+                  color: Colors.black,
+                  fontSize: 18.0
+              ),
               onChanged: (String text) {
                 setState(() {
                   _isDesc = text.length > 0;
                 });
               },
-              decoration: new InputDecoration.collapsed(hintText: "Description"),
+              decoration: new InputDecoration.collapsed(
+                  hintText: "Description",
+                border: new UnderlineInputBorder(
+                  borderSide: const BorderSide(
+                      color: Colors.blueAccent,
+                      style: BorderStyle.solid,
+                      width: 5.0),
+                ),
+              ),
             ),
           ),
           new Padding(
             padding: const EdgeInsets.all(8.0),
             child: new RaisedButton(
+              padding: const EdgeInsets.only(left: 45.0, right: 45.0, top: 15.0, bottom: 15.0),
               color: Colors.blueAccent,
               elevation: 2.0,
               child: new Text("Post", style: new TextStyle(
