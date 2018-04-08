@@ -102,25 +102,27 @@ class HomePageState extends State<HomePage> {
                         );
                   });
             }),
-            new PopupMenuButton<_DesignAppMenuItems>(
-                onSelected: (_DesignAppMenuItems value) {
-                  _handleStockMenu(context, value);
-                },
-                itemBuilder: (BuildContext context) =>
-                    <PopupMenuItem<_DesignAppMenuItems>>[
-                      new PopupMenuItem<_DesignAppMenuItems>(
-                          value: _DesignAppMenuItems.profile,
-                          child: const Text('PROFILE')),
-                      new PopupMenuItem<_DesignAppMenuItems>(
-                          value: _DesignAppMenuItems.logout,
-                          child: const Text('LOG OUT')),
-                      new PopupMenuItem<_DesignAppMenuItems>(
-                          value: _DesignAppMenuItems.cod,
-                          child: const Text('COD')),
-                      new PopupMenuItem<_DesignAppMenuItems>(
-                          value: _DesignAppMenuItems.ccc,
-                          child: const Text('CCC'))
-                    ])
+            new Builder(builder: (context) {
+              return new PopupMenuButton<_DesignAppMenuItems>(
+                  onSelected: (_DesignAppMenuItems value) {
+                    _handleStockMenu(context, value);
+                  },
+                  itemBuilder: (BuildContext context) =>
+                      <PopupMenuItem<_DesignAppMenuItems>>[
+                        new PopupMenuItem<_DesignAppMenuItems>(
+                            value: _DesignAppMenuItems.profile,
+                            child: const Text('PROFILE')),
+                        new PopupMenuItem<_DesignAppMenuItems>(
+                            value: _DesignAppMenuItems.logout,
+                            child: const Text('LOG OUT')),
+                        new PopupMenuItem<_DesignAppMenuItems>(
+                            value: _DesignAppMenuItems.cod,
+                            child: const Text('COD')),
+                        new PopupMenuItem<_DesignAppMenuItems>(
+                            value: _DesignAppMenuItems.ccc,
+                            child: const Text('CCC'))
+                      ]);
+            })
           ],
         ),
         body: new Container(
