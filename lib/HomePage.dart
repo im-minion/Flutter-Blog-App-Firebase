@@ -37,25 +37,65 @@ class HomePageState extends State<HomePage> {
     });
   }
 
-  Future<Null> _ensureLoggedIn() async {
-    GoogleSignInAccount user = googleSignIn.currentUser;
-    if (user == null) user = await googleSignIn.signInSilently();
-    if (user == null) {
-      user = await googleSignIn.signIn();
-      analytics.logLogin();
-    }
-    if (await auth.currentUser() == null) {
-      GoogleSignInAuthentication credentials =
-          await googleSignIn.currentUser.authentication;
-      await auth.signInWithGoogle(
-        idToken: credentials.idToken,
-        accessToken: credentials.accessToken,
-      );
-    }
-  }
-
   Future<Null> checkStatusOfUser() async {
     await _ensureLoggedIn();
+  }
+
+  Future<Null> _ensureLoggedIn() async {
+    SharedPreferences prefs;
+    prefs = await SharedPreferences.getInstance();
+//
+    GoogleSignInAccount user = googleSignIn.currentUser;
+//
+//    if (user == null) user = await googleSignIn.signInSilently();
+//    if (user == null) {
+//      user = await googleSignIn.signIn();
+//      analytics.logLogin();
+//    }
+//    if (await auth.currentUser() == null) {
+//      GoogleSignInAuthentication credentials =
+//      await googleSignIn.currentUser.authentication;
+//      await auth.signInWithGoogle(
+//        idToken: credentials.idToken,
+//        accessToken: credentials.accessToken,
+//      );
+//    }
+//    Future<Null> _handleSignIn() async {
+    try {
+      if (user == null) user = await googleSignIn.signInSilently();
+      if (user == null) {
+        user = await googleSignIn.signIn();
+        analytics.logLogin();
+      }
+      if (await auth.currentUser() == null) {
+        GoogleSignInAuthentication credentials =
+            await googleSignIn.currentUser.authentication;
+        await auth.signInWithGoogle(
+          idToken: credentials.idToken,
+          accessToken: credentials.accessToken,
+        );
+      }
+//      user = await googleSignIn.signIn();
+      print(user.displayName);
+      prefs.setString("username", user.displayName);
+      prefs.setString("userid", user.id);
+      prefs.setString("useremail", user.email);
+      prefs.setString("userphotourl", user.photoUrl);
+      analytics.logLogin();
+//      GoogleSignInAuthentication credentials =
+//          await googleSignIn.currentUser.authentication;
+//      await auth.signInWithGoogle(
+//        idToken: credentials.idToken,
+//        accessToken: credentials.accessToken,
+//      );
+      this.setState(() {
+        loggedIn = true;
+      });
+      //also add into DB
+    } catch (error) {
+      print(error);
+    }
+//    }
   }
 
   void _select(Choice choice) {
@@ -68,10 +108,10 @@ class HomePageState extends State<HomePage> {
   void choiceSelected(Choice selectedChoice) {
     switch (selectedChoice.title) {
       case 'Profile':
-       print("pro");
+        print("pro");
         break;
       case 'Logout':
-       print("lo");
+        print("lo");
         logoutUser();
         break;
     }
@@ -83,62 +123,70 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-        title: "SimpleBlogApp",
-        home: new Scaffold(
-            appBar: new AppBar(
-              title: new Text("Simple Blog App"),
-              actions: <Widget>[
-                new Builder(builder: (context) {
-                  return new IconButton(
-                      icon: new Icon(Icons.add),
-                      onPressed: () {
-                        Navigator.of(context).push(
-                              new MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      new PostBlogPage()),
-                            );
-                      });
-                }),
-                new Builder(builder: (context) {
-                  return new PopupMenuButton(
-                      onSelected: _select,
-                      itemBuilder: (BuildContext context) {
-                        return choices.map((Choice choice) {
-                          return new PopupMenuItem<Choice>(
-                            value: choice,
-                            child: new Text(choice.title),
-                          );
-                        }).toList();
-                      });
-                })
-              ],
-            ),
-            body: new Builder(builder: (context) {
-              return new Container(
-                child: new Column(children: <Widget>[
-                  new Flexible(
-                    child: new FirebaseAnimatedList(
-                      query: reference,
-                      sort: (a, b) => b.key.compareTo(a.key),
-                      padding: new EdgeInsets.all(8.0),
-                      reverse: false,
-                      itemBuilder: (_, DataSnapshot snapshot,
-                          Animation<double> animation, int index) {
-                        return new BlogRow(snapshot);
-                      },
-                    ),
-                  ),
-                  new Divider(height: 1.0),
-                ]),
-              );
-            })));
+    Scaffold s = new Scaffold(
+        appBar: new AppBar(
+          title: new Text("Simple Blog App"),
+          actions: <Widget>[
+            new Builder(builder: (context) {
+              return new IconButton(
+                  icon: new Icon(Icons.add),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                          new MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  new PostBlogPage()),
+                        );
+                  });
+            }),
+            new Builder(builder: (context) {
+              return new PopupMenuButton(
+                  onSelected: _select,
+                  itemBuilder: (BuildContext context) {
+                    return choices.map((Choice choice) {
+                      return new PopupMenuItem<Choice>(
+                        value: choice,
+                        child: new Text(choice.title),
+                      );
+                    }).toList();
+                  });
+            })
+          ],
+        ),
+        body: new Builder(builder: (context) {
+          return new Container(
+            child: new Column(children: <Widget>[
+              new Flexible(
+                child: new FirebaseAnimatedList(
+                  query: reference,
+                  sort: (a, b) => b.key.compareTo(a.key),
+                  padding: new EdgeInsets.all(8.0),
+                  reverse: false,
+                  itemBuilder: (_, DataSnapshot snapshot,
+                      Animation<double> animation, int index) {
+                    return new BlogRow(snapshot);
+                  },
+                ),
+              ),
+              new Divider(height: 1.0),
+            ]),
+          );
+        }));
+    Scaffold s1 = new Scaffold(
+      appBar: new AppBar(
+        title: new Text("Login"),
+      ),
+      body: new RaisedButton(onPressed: () {
+        checkStatusOfUser();
+      }),
+    );
+
+    return new MaterialApp(title: "SimpleBlogApp", home: loggedIn ? s : s1);
   }
 
   @override
   void initState() {
     super.initState();
-    checkStatusOfUser();
+//    checkStatusOfUser();
     this._function();
   }
 }
