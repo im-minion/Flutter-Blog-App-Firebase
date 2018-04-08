@@ -30,7 +30,7 @@ Future<Null> _ensureLoggedIn() async {
   }
   if (await auth.currentUser() == null) {
     GoogleSignInAuthentication credentials =
-        await googleSignIn.currentUser.authentication;
+    await googleSignIn.currentUser.authentication;
     await auth.signInWithGoogle(
       idToken: credentials.idToken,
       accessToken: credentials.accessToken,

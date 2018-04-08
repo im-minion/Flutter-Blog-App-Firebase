@@ -75,44 +75,57 @@ class _PostPageState extends State<_PostPage> {
           new InkWell(
             child: _image == null
                 ? new Image.asset(
-                    'assets/img/addbutton.png',
-                    height: 250.0,
-                    width: 250.0,
+                    'assets/img/img-placeholder.jpg',
+                    height: 200.0,
+                    width: 300.0,
                     fit: BoxFit.fill,
                   )
                 : new Image.file(
                     _image,
-                    height: 250.0,
-                    width: 250.0,
+                    height: 200.0,
+                    width: 300.0,
                   ),
             onTap: () {
               getImage();
               _isImage = true;
             },
           ),
-          new TextField(
-            controller: _title,
-            onChanged: (String text) {
-              setState(() {
-                _isTitle = text.length > 0;
-              });
-            },
-            decoration: new InputDecoration.collapsed(hintText: "Title"),
+          new Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: new TextField(
+              controller: _title,
+              onChanged: (String text) {
+                setState(() {
+                  _isTitle = text.length > 0;
+                });
+              },
+              decoration: new InputDecoration.collapsed(hintText: "Title"),
+            ),
           ),
-          new TextField(
-            controller: _desc,
-            onChanged: (String text) {
-              setState(() {
-                _isDesc = text.length > 0;
-              });
-            },
-            decoration: new InputDecoration.collapsed(hintText: "Description"),
+          new Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: new TextField(
+              controller: _desc,
+              onChanged: (String text) {
+                setState(() {
+                  _isDesc = text.length > 0;
+                });
+              },
+              decoration: new InputDecoration.collapsed(hintText: "Description"),
+            ),
           ),
-          new RaisedButton(
-            child: new Text("Post"),
-            onPressed: _isTitle && _isDesc && _isImage
-                ? () => _handleSubmitted(_title.text, _desc.text, _image)
-                : null,
+          new Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: new RaisedButton(
+              color: Colors.blueAccent,
+              elevation: 2.0,
+              child: new Text("Post", style: new TextStyle(
+                color: Colors.white
+              ),),
+              onPressed: _isTitle && _isDesc && _isImage
+                  ? () => _handleSubmitted(_title.text, _desc.text, _image)
+                  : null,
+            ),
           )
         ],
       ),
