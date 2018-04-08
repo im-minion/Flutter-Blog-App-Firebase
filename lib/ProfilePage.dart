@@ -42,21 +42,34 @@ class ProfilePageState extends State<ProfilePage> {
         body: new Container(
           alignment: Alignment.center,
           child: new Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              new CircleAvatar(
-                child: new Image.network(
-                  userphotourl,
-                  fit: BoxFit.fill,
-                  height: 120.0,
-                  width: 120.0,
+              new Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: new CircleAvatar(
+                  child: new Image.network(
+                    userphotourl,
+                    fit: BoxFit.fill,
+                    height: 130.0,
+                    width: 130.0,
+                  ),
+                  radius: 100.0,
+                  backgroundColor: Colors.blueAccent,
                 ),
-                radius: 100.0,
-                backgroundColor: Colors.blueAccent,
               ),
-              new Text(username),
-              new Text(useremail)
+              new Padding(
+                padding: const EdgeInsets.fromLTRB(0.0, 16.0, 0.0, 8.0),
+                child: new Text(
+                  username,
+                  style: new TextStyle(
+                      fontSize: 22.0, fontWeight: FontWeight.bold),
+                ),
+              ),
+              new Text(
+                useremail,
+                style: new TextStyle(fontSize: 18.0),
+              ),
             ],
           ),
         ),
