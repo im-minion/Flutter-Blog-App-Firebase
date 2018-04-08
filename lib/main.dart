@@ -44,6 +44,13 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
+  void _select(Choice choice) {
+    setState(() {
+      // Causes the app to rebuild with the new _selectedChoice.
+      choiceSelected(choice);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
@@ -64,10 +71,15 @@ class HomePageState extends State<HomePage> {
                     });
               }),
               new Builder(builder: (context) {
-                return new IconButton(
-                    icon: new Icon(Icons.more_vert),
-                    onPressed: () {
-                      print("cllcllcl");
+                return new PopupMenuButton(
+                    onSelected: _select,
+                    itemBuilder: (BuildContext context) {
+                      return choices.map((Choice choice) {
+                        return new PopupMenuItem<Choice>(
+                          value: choice,
+                          child: new Text(choice.title),
+                        );
+                      }).toList();
                     });
               })
             ],
@@ -114,6 +126,22 @@ class HomePageState extends State<HomePage> {
     super.initState();
     checkStatusOfUser();
   }
+
+  void choiceSelected(Choice selectedChoice) {
+    switch (selectedChoice.title) {
+      case 'Profile':
+//       print("pro");
+        break;
+      case 'Logout':
+//       print("lo");
+        logoutUser();
+        break;
+    }
+  }
+
+  void logoutUser() {
+    //logout user
+  }
 }
 
 @override
@@ -138,3 +166,14 @@ class BlogRow extends StatelessWidget {
     );
   }
 }
+
+class Choice {
+  const Choice({this.title});
+
+  final String title;
+}
+
+const List<Choice> choices = const <Choice>[
+  const Choice(title: 'Profile'),
+  const Choice(title: 'Logout'),
+];

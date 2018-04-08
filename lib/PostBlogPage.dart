@@ -130,7 +130,6 @@ class _PostPageState extends State<_PostPage> {
   }
 
   void _addBlog(String title, String description, String imageUrl) {
-//    analytics.logEvent(name: 'post_blog');
 //    print(googleSignIn.currentUser.displayName);
 //    print(googleSignIn.currentUser.id);
 //    print(title);
@@ -148,6 +147,7 @@ class _PostPageState extends State<_PostPage> {
 //        new MaterialPageRoute(
 //            builder: (BuildContext context) => new HomePage()),
 //        (Route route) => route == null);
-    Navigator.of(context).pop();
+    print("success");
+    analytics.logEvent(name: 'post_blog');
   }
 }
