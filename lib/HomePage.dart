@@ -101,11 +101,12 @@ class HomePageState extends State<HomePage> {
               return new IconButton(
                   icon: new Icon(Icons.add),
                   onPressed: () {
-                    Navigator.of(context).push(
-                          new MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  new PostBlogPage()),
-                        );
+//                    Navigator.of(context).push(
+//                          new MaterialPageRoute(
+//                              builder: (BuildContext context) =>
+//                                  new PostBlogPage()),
+//                        );
+                    Navigator.of(context).pushNamed("/post");
                   });
             }),
             new Builder(builder: (context) {
@@ -159,6 +160,7 @@ class HomePageState extends State<HomePage> {
         title: "SimpleBlogApp",
         routes: <String, WidgetBuilder>{
           "/profile": (BuildContext context) => new ProfilePage(),
+          "/post":(BuildContext context) => new PostBlogPage(),
         },
         home: loggedIn ? homeScaffold : loginScaffold);
   }

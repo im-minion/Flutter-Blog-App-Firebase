@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_blog_app/HomePage.dart';
 import 'package:flutter_blog_app/main.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -36,6 +37,9 @@ class PostBlogPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
+      routes: <String, WidgetBuilder>{
+        "/home": (BuildContext context) => new HomePage(),
+      },
       home: new Scaffold(
           appBar: new AppBar(
             title: new Text('Post Blog..'),
@@ -202,6 +206,8 @@ class _PostPageState extends State<_PostPage> {
     analytics.logEvent(name: 'post_blog');
     setState(() {
       _isLoading = false;
+      Navigator
+          .pop(context);
     });
   }
 }
