@@ -62,13 +62,15 @@ class HomePageState extends State<HomePage> {
           accessToken: credentials.accessToken,
         );
       }
-      print(user.displayName);
       prefs.setString("username", user.displayName);
       prefs.setString("userid", user.id);
       prefs.setString("useremail", user.email);
       prefs.setString("userphotourl", user.photoUrl);
       analytics.logLogin();
-
+      final userRef = FirebaseDatabase.instance.reference().child('Users');
+      userRef
+          .child(user.id)
+          .set({"name": user.displayName, "image": user.photoUrl});
       this.setState(() {
         loggedIn = true;
       });
@@ -79,7 +81,11 @@ class HomePageState extends State<HomePage> {
 
   Future<Null> logoutUser() async {
     //logout user
+    SharedPreferences prefs;
+    prefs = await SharedPreferences.getInstance();
     await FirebaseAuth.instance.signOut();
+    prefs.clear();
+    prefs.clear();
     this.setState(() {
       loggedIn = false;
     });
@@ -166,7 +172,7 @@ class HomePageState extends State<HomePage> {
   void _handleStockMenu(BuildContext context, _DesignAppMenuItems value) {
     switch (value) {
       case _DesignAppMenuItems.profile:
-        print('Profile');
+//        print('Profile');
         Navigator.of(context).pushNamed("/profile");
         break;
       case _DesignAppMenuItems.logout:
