@@ -17,6 +17,7 @@ class BlogRow extends StatelessWidget {
             new Image.network(snapshot.value['IMAGE']),
             new Text(snapshot.value['Title']),
             new Text(snapshot.value['DESCRIPTION']),
+//            TODO: add like button and its functionality
             new Text(snapshot.value['username']),
           ],
         ),
