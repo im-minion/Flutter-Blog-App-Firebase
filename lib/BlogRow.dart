@@ -19,12 +19,9 @@ class BlogRowState extends State<BlogRow> {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-    // 24 is for notification bar on Android
-
+//    var size = MediaQuery.of(context).size;
 //    final double itemHeight = (size.height - kToolbarHeight - 24) / 2.2;
-    final double itemWidth = size.width;
-
+//    final double itemWidth = size.width;
     return new Container(
       child: new Card(
         elevation: 2.5,
@@ -55,7 +52,11 @@ class BlogRowState extends State<BlogRow> {
                             Icons.favorite_border,
                             color: Colors.blueAccent,
                           ),
-                    onPressed: _liked ? dislike() : like()),
+                    onPressed: () {
+                      Scaffold.of(context).showSnackBar(new SnackBar(
+                            content: new Text("Coming Soon!"),
+                          ));
+                    }),
               ],
             ),
           ],
@@ -63,8 +64,4 @@ class BlogRowState extends State<BlogRow> {
       ),
     );
   }
-
-  like() {}
-
-  dislike() {}
 }
