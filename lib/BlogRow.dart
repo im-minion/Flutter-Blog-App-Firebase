@@ -3,10 +3,19 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 @override
-class BlogRow extends StatelessWidget {
+class BlogRow extends StatefulWidget {
   final DataSnapshot snapshot;
 
   BlogRow(this.snapshot);
+
+  BlogRowState createState() => new BlogRowState(this.snapshot);
+}
+
+class BlogRowState extends State<BlogRow> {
+  bool _liked = false;
+  final DataSnapshot snapshot;
+
+  BlogRowState(this.snapshot);
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +43,19 @@ class BlogRow extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                new Text(
-                  snapshot.value['username'],style: new TextStyle(color: Colors.blueAccent)),
+                new Text(snapshot.value['username'],
+                    style: new TextStyle(color: Colors.blueAccent)),
                 new IconButton(
-                    icon: new Icon(Icons.thumb_up), onPressed: _handleLike()),
+                    icon: _liked
+                        ? new Icon(
+                            Icons.favorite,
+                            color: Colors.blueAccent,
+                          )
+                        : new Icon(
+                            Icons.favorite_border,
+                            color: Colors.blueAccent,
+                          ),
+                    onPressed: _liked ? dislike() : like()),
               ],
             ),
           ],
@@ -46,7 +64,7 @@ class BlogRow extends StatelessWidget {
     );
   }
 
-  _handleLike() {
-//    TODO: handle functionality
-  }
+  like() {}
+
+  dislike() {}
 }
