@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 String username, userid, useremail, userphotourl;
 
@@ -47,16 +48,14 @@ class ProfilePageState extends State<ProfilePage> {
             children: <Widget>[
               new Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: new CircleAvatar(
-                  child: new Image.network(
-//                    TODO: Network image with retry
-                    userphotourl,
-                    fit: BoxFit.fill,
-                    height: 130.0,
-                    width: 130.0,
-                  ),
-                  radius: 100.0,
-                  backgroundColor: Colors.blueAccent,
+                child: new FadeInImage.memoryNetwork(
+                  placeholder: kTransparentImage,
+                  image: userphotourl,
+                  height: 150.0,
+                  width: 150.0,
+                  fadeInDuration: const Duration(milliseconds: 1000),
+                  alignment: Alignment.topCenter,
+                  fit: BoxFit.contain,
                 ),
               ),
               new Padding(
