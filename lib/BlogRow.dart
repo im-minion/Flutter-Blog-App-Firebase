@@ -32,9 +32,10 @@ class BlogRow extends StatelessWidget {
             new Text(snapshot.value['DESCRIPTION']),
             new Row(
               mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                new Text(snapshot.value['username']),
+                new Text(
+                  snapshot.value['username'],style: new TextStyle(color: Colors.blueAccent)),
                 new IconButton(
                     icon: new Icon(Icons.thumb_up), onPressed: _handleLike()),
               ],

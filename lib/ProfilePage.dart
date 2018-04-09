@@ -68,7 +68,7 @@ class ProfilePageState extends State<ProfilePage> {
               ),
               new Text(
                 useremail,
-                style: new TextStyle(fontSize: 18.0),
+                style: new TextStyle(fontSize: 18.0,color: Colors.blueAccent),
               ),
             ],
           ),
