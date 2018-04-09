@@ -57,6 +57,7 @@ class _PostPageState extends State<_PostPage> {
   bool _isTitle = false;
   bool _isDesc = false;
   bool _isImage = false;
+  bool _isLoading = false;
 
   Future getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
@@ -72,96 +73,104 @@ class _PostPageState extends State<_PostPage> {
       child: new SingleChildScrollView(
         scrollDirection: Axis.vertical,
         reverse: true,
-        child: new Column(
-          children: <Widget>[
-            new Padding(padding: const EdgeInsets.only(top: 24.0)),
-            new InkWell(
-              child: _image == null
-                  ? new Image.asset(
-                      'assets/img/img-placeholder.jpg',
-                      height: 200.0,
-                      width: 300.0,
-                      fit: BoxFit.fill,
-                    )
-                  : new Image.file(
-                      _image,
-                      height: 200.0,
-                      width: 300.0,
-                    ),
-              onTap: () {
-                getImage();
-                _isImage = true;
-              },
-            ),
-            new Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: new TextField(
-                controller: _title,
-                style: new TextStyle(
-                  color: Colors.black,
-                  fontSize: 18.0,
-                ),
-                onChanged: (String text) {
-                  setState(() {
-                    _isTitle = text.length > 0;
-                  });
+        child: new Container(
+          child: new Column(
+            children: <Widget>[
+              new Padding(
+                padding: const EdgeInsets.only(top: 24.0),
+                child: _isLoading ? new CircularProgressIndicator() : null,
+              ),
+              new Padding(padding: const EdgeInsets.only(top: 24.0)),
+              new InkWell(
+                child: _image == null
+                    ? new Image.asset(
+                        'assets/img/img-placeholder.jpg',
+                        height: 200.0,
+                        width: 300.0,
+                        fit: BoxFit.fill,
+                      )
+                    : new Image.file(
+                        _image,
+                        height: 200.0,
+                        width: 300.0,
+                      ),
+                onTap: () {
+                  getImage();
+                  _isImage = true;
                 },
-                decoration: new InputDecoration.collapsed(
+              ),
+              new Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: new TextField(
+                  controller: _title,
+                  style: new TextStyle(
+                    color: Colors.black,
+                    fontSize: 18.0,
+                  ),
+                  onChanged: (String text) {
+                    setState(() {
+                      _isTitle = text.length > 0;
+                    });
+                  },
+                  decoration: new InputDecoration.collapsed(
                     hintText: "Title",
                     border: new UnderlineInputBorder(
                       borderSide: const BorderSide(
                           color: Colors.blueAccent,
                           style: BorderStyle.solid,
                           width: 5.0),
+                    ),
                   ),
                 ),
               ),
-            ),
-            new Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: new TextField(
-                controller: _desc,
-                style: new TextStyle(
-                    color: Colors.black,
-                    fontSize: 18.0
-                ),
-                onChanged: (String text) {
-                  setState(() {
-                    _isDesc = text.length > 0;
-                  });
-                },
-                decoration: new InputDecoration.collapsed(
+              new Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: new TextField(
+                  controller: _desc,
+                  style: new TextStyle(color: Colors.black, fontSize: 18.0),
+                  onChanged: (String text) {
+                    setState(() {
+                      _isDesc = text.length > 0;
+                    });
+                  },
+                  decoration: new InputDecoration.collapsed(
                     hintText: "Description",
-                  border: new UnderlineInputBorder(
-                    borderSide: const BorderSide(
-                        color: Colors.blueAccent,
-                        style: BorderStyle.solid,
-                        width: 5.0),
+                    border: new UnderlineInputBorder(
+                      borderSide: const BorderSide(
+                          color: Colors.blueAccent,
+                          style: BorderStyle.solid,
+                          width: 5.0),
+                    ),
                   ),
                 ),
               ),
-            ),
-            new Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: new RaisedButton(
-                padding: const EdgeInsets.only(left: 45.0, right: 45.0, top: 15.0, bottom: 15.0),
-                color: Colors.blueAccent,
-                elevation: 2.0,
-                child: new Text("Post", style: new TextStyle(
-                  color: Colors.white
-                ),),
-                onPressed: _isTitle && _isDesc && _isImage
-                    ? () => _handleSubmitted(_title.text, _desc.text, _image)
-                    : null,
-              ),
-            )
-          ],
+              new Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: new RaisedButton(
+                  padding: const EdgeInsets.only(
+                      left: 45.0, right: 45.0, top: 15.0, bottom: 15.0),
+                  color: Colors.blueAccent,
+                  elevation: 2.0,
+                  child: new Text(
+                    "Post",
+                    style: new TextStyle(color: Colors.white),
+                  ),
+                  onPressed: _isTitle && _isDesc && _isImage && !_isLoading
+                      ? () => _handleSubmitted(_title.text, _desc.text, _image)
+                      : null,
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
   }
 
   Future<Null> _handleSubmitted(String title, String desc, File img) async {
+    setState(() {
+      _isLoading = true;
+    });
     await _ensureLoggedIn();
 
     StorageReference ref = FirebaseStorage.instance.ref().child("Blog_Images/" +
@@ -191,5 +200,8 @@ class _PostPageState extends State<_PostPage> {
 //        (Route route) => route == null);
     print("success");
     analytics.logEvent(name: 'post_blog');
+    setState(() {
+      _isLoading = false;
+    });
   }
 }
