@@ -11,8 +11,8 @@ class ProfilePage extends StatefulWidget {
 }
 
 class ProfilePageState extends State<ProfilePage> {
+  bool loggedIn = false;
   Future<Null> _function() async {
-    bool loggedIn = false;
     SharedPreferences prefs;
 
     prefs = await SharedPreferences.getInstance();
