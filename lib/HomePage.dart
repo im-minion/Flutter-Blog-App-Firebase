@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter_blog_app/BlogRow.dart';
+import 'package:flutter_blog_app/ChatPage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -93,11 +94,6 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    FloatingActionButton fab = new FloatingActionButton(onPressed: () {
-      Scaffold.of(context).showSnackBar(new SnackBar(
-            content: new Text("Coming Soon!"),
-          ));
-    });
     Scaffold homeScaffold = new Scaffold(
         appBar: new AppBar(
           title: new Text("Simple Blog App"),
@@ -146,13 +142,14 @@ class HomePageState extends State<HomePage> {
             new Divider(height: 1.0),
             new Builder(
               builder: (BuildContext context) {
-                return new FloatingActionButton(
-                  onPressed: () {
-                    Scaffold.of(context).showSnackBar(new SnackBar(
-                          content: new Text("Coming Soon!"),
-                        ));
-                  },
-                  child: new Icon(Icons.chat),
+                return new Padding(
+                  padding: const EdgeInsets.fromLTRB(0.0,0.0,12.0,12.0),
+                  child: new FloatingActionButton(
+                    onPressed: () {
+                      Navigator.of(context).pushNamed("/chat");
+                    },
+                    child: new Icon(Icons.chat),
+                  ),
                 );
               },
             )
@@ -176,6 +173,7 @@ class HomePageState extends State<HomePage> {
         routes: <String, WidgetBuilder>{
           "/profile": (BuildContext context) => new ProfilePage(),
           "/post": (BuildContext context) => new PostBlogPage(),
+          "/chat":(BuildContext context) => new ChatPage(),
         },
         home: loggedIn ? homeScaffold : loginScaffold);
   }
