@@ -19,6 +19,7 @@ class BlogRow extends StatelessWidget {
       child: new Card(
         elevation: 2.5,
         child: new Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             new FadeInImage.memoryNetwork(
               placeholder: kTransparentImage,
@@ -27,8 +28,22 @@ class BlogRow extends StatelessWidget {
               fit: BoxFit.contain,
             ),
 //            new Image.network(snapshot.value['IMAGE']),
-            new Text(snapshot.value['Title']),
-            new Text(snapshot.value['DESCRIPTION']),
+            new Padding(
+              padding: const EdgeInsets.fromLTRB(8.0, 8.0, 0.0, 0.0),
+              child: new Text(
+                snapshot.value['Title'],
+                style:
+                    new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
+            ),
+            new Padding(
+              padding: const EdgeInsets.fromLTRB(8.0, 8.0, 0.0, 0.0),
+              child: new Text(
+                snapshot.value['DESCRIPTION'],
+                style: new TextStyle(
+                    fontWeight: FontWeight.normal, fontSize: 16.0),
+              ),
+            ),
             new Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
