@@ -25,6 +25,7 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
   bool loggedIn = false;
+  bool _googleLoginProgress = false;
   SharedPreferences prefs;
 
   Future<Null> _function() async {
@@ -74,6 +75,7 @@ class HomePageState extends State<HomePage> {
           .set({"name": user.displayName, "image": user.photoUrl});
       this.setState(() {
         loggedIn = true;
+        _googleLoginProgress = false;
       });
     } catch (error) {
       print(error);
@@ -143,7 +145,7 @@ class HomePageState extends State<HomePage> {
             new Builder(
               builder: (BuildContext context) {
                 return new Padding(
-                  padding: const EdgeInsets.fromLTRB(0.0,0.0,12.0,12.0),
+                  padding: const EdgeInsets.fromLTRB(0.0, 0.0, 12.0, 12.0),
                   child: new FloatingActionButton(
                     onPressed: () {
                       Navigator.of(context).pushNamed("/chat");
@@ -160,11 +162,16 @@ class HomePageState extends State<HomePage> {
         title: new Text("Login"),
       ),
       body: new Center(
-        child: new RaisedButton(
-            onPressed: () {
-              checkStatusOfUser();
-            },
-            child: new Text("Google Sign in..")),
+        child: _googleLoginProgress
+            ? new CircularProgressIndicator()
+            : new RaisedButton(
+                onPressed: () {
+                  setState(() {
+                    _googleLoginProgress = true;
+                  });
+                  checkStatusOfUser();
+                },
+                child: new Text("Google Sign in..")),
       ),
     );
 
@@ -173,7 +180,7 @@ class HomePageState extends State<HomePage> {
         routes: <String, WidgetBuilder>{
           "/profile": (BuildContext context) => new ProfilePage(),
           "/post": (BuildContext context) => new PostBlogPage(),
-          "/chat":(BuildContext context) => new ChatPage(),
+          "/chat": (BuildContext context) => new ChatPage(),
         },
         home: loggedIn ? homeScaffold : loginScaffold);
   }
