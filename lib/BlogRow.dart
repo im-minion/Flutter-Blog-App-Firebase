@@ -3,19 +3,12 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 @override
-class BlogRow extends StatefulWidget {
+class BlogRow extends StatelessWidget {
   final DataSnapshot snapshot;
 
   BlogRow(this.snapshot);
 
-  BlogRowState createState() => new BlogRowState(this.snapshot);
-}
-
-class BlogRowState extends State<BlogRow> {
   bool _liked = false;
-  final DataSnapshot snapshot;
-
-  BlogRowState(this.snapshot);
 
   @override
   Widget build(BuildContext context) {
