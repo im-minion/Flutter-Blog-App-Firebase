@@ -12,19 +12,25 @@ String username, userid, useremail, userphotourl;
 final analytics = new FirebaseAnalytics();
 final reference = FirebaseDatabase.instance.reference().child('chat');
 
-class ChatPage extends StatefulWidget {
+class ChatPage extends StatelessWidget {
   @override
-  ChatPageState createState() => new ChatPageState();
+  Widget build(BuildContext context) {
+    return new MaterialApp(title: "Chat", home: new ChatScreen());
+  }
 }
 
-class ChatPageState extends State<ChatPage> {
+class ChatScreen extends StatefulWidget {
+  @override
+  ChatScreenState createState() => new ChatScreenState();
+}
+
+class ChatScreenState extends State<ChatScreen> {
   bool loggedIn = false;
   TextEditingController _textEditingController = new TextEditingController();
   bool _isComposing = false;
 
   Future<Null> _function() async {
     SharedPreferences prefs;
-
     prefs = await SharedPreferences.getInstance();
     this.setState(() {
       if (prefs.getString("username") != null) {
@@ -39,6 +45,24 @@ class ChatPageState extends State<ChatPage> {
     });
   }
 
+  Future<Null> _handleClick(String message) async {
+    _textEditingController.clear();
+    setState(() {
+      _isComposing = false;
+    });
+    _sendMessage(message);
+  }
+
+  void _sendMessage(String message) {
+    reference.push().set({
+      "messageTime": new DateTime.now().millisecondsSinceEpoch.toString(),
+      "messageText": message,
+      "messageUser": useremail,
+      "profileUrl": userphotourl
+    });
+    analytics.logEvent(name: 'send_message');
+  }
+
   @override
   void initState() {
     super.initState();
@@ -47,79 +71,62 @@ class ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-      home: new Scaffold(
-        appBar: new AppBar(
-          title: new Text("Chat"),
-          elevation:
-              Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0,
-        ),
-        body: new Column(
-          children: <Widget>[
-            new Flexible(
-                child: new FirebaseAnimatedList(
-              query: reference,
-//              sort: (a, b) => b.key.compareTo(a.key),
-              padding: new EdgeInsets.all(8.0),
-              reverse: false,
-              itemBuilder: (_, DataSnapshot snapshot,
-                  Animation<double> animation, int index) {
-                return new ChatRow(snapshot);
-              },
-            )),
-            new Divider(height: 1.0),
-            new Container(
-              decoration: new BoxDecoration(color: Theme.of(context).cardColor),
-              child: new IconTheme(
-                data: new IconThemeData(color: Theme.of(context).accentColor),
-                child: new Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: new Row(children: <Widget>[
-                      new Flexible(
-                        child: new TextField(
-                          controller: _textEditingController,
-                          onChanged: (String text) {
-                            setState(() {
-                              _isComposing = text.length > 0;
-                            });
-                          },
-                          decoration: new InputDecoration.collapsed(
-                              hintText: "Send a message"),
-                        ),
+    return new Scaffold(
+      appBar: new AppBar(
+        title: new Text("Chat"),
+        elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0,
+      ),
+      body: new Column(
+        children: <Widget>[
+          new Flexible(
+              child: new FirebaseAnimatedList(
+            query: reference,
+            sort: (a, b) => b.key.compareTo(a.key),
+            padding: new EdgeInsets.all(8.0),
+            reverse: true,
+            itemBuilder: (_, DataSnapshot snapshot, Animation<double> animation,
+                int index) {
+              return new ChatRow(snapshot);
+            },
+          )),
+          new Divider(height: 1.0),
+          new Container(
+            decoration: new BoxDecoration(color: Theme.of(context).cardColor),
+            child: new IconTheme(
+              data: new IconThemeData(color: Theme.of(context).accentColor),
+              child: new Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: new Row(children: <Widget>[
+                    new Flexible(
+                      child: new TextField(
+                        controller: _textEditingController,
+                        onChanged: (String text) {
+                          setState(() {
+                            _isComposing = text.length > 0;
+                          });
+                        },
+                        decoration: new InputDecoration.collapsed(
+                            hintText: "Send a message"),
                       ),
-                      new Container(
-                          margin: new EdgeInsets.symmetric(horizontal: 4.0),
-                          child: new IconButton(
-                              icon: new Icon(Icons.send),
-                              onPressed: _isComposing
-                                  ? () =>
-                                      _sendMessage(_textEditingController.text)
-                                  : null)),
-                    ]),
-                    decoration: Theme.of(context).platform == TargetPlatform.iOS
-                        ? new BoxDecoration(
-                            border: new Border(
-                                top: new BorderSide(color: Colors.grey[200])))
-                        : null),
-              ),
+                    ),
+                    new Container(
+                        margin: new EdgeInsets.symmetric(horizontal: 4.0),
+                        child: new IconButton(
+                            icon: new Icon(Icons.send),
+                            onPressed: _isComposing
+                                ? () =>
+                                    _handleClick(_textEditingController.text)
+                                : null)),
+                  ]),
+                  decoration: Theme.of(context).platform == TargetPlatform.iOS
+                      ? new BoxDecoration(
+                          border: new Border(
+                              top: new BorderSide(color: Colors.grey[200])))
+                      : null),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
-  }
-
-  Future<Null> _sendMessage(String message) async {
-    _textEditingController.clear();
-    setState(() {
-      _isComposing = false;
-    });
-    reference.push().set({
-      "messageTime": new DateTime.now().millisecondsSinceEpoch.toString(),
-      "messageText": message,
-      "messageUser": useremail,
-      "profileUrl": userphotourl
-    });
-    analytics.logEvent(name: 'send_message');
   }
 }
