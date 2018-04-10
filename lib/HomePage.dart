@@ -93,6 +93,11 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    FloatingActionButton fab = new FloatingActionButton(onPressed: () {
+      Scaffold.of(context).showSnackBar(new SnackBar(
+            content: new Text("Coming Soon!"),
+          ));
+    });
     Scaffold homeScaffold = new Scaffold(
         appBar: new AppBar(
           title: new Text("Simple Blog App"),
@@ -127,20 +132,30 @@ class HomePageState extends State<HomePage> {
           ],
         ),
         body: new Container(
-          child: new Column(children: <Widget>[
-            new Flexible(
-              child: new FirebaseAnimatedList(
-                query: reference,
-                sort: (a, b) => b.key.compareTo(a.key),
-                padding: new EdgeInsets.all(8.0),
-                reverse: false,
-                itemBuilder: (_, DataSnapshot snapshot,
-                    Animation<double> animation, int index) {
-                  return new BlogRow(snapshot);
-                },
-              ),
+          child: new Stack(alignment: Alignment.bottomRight, children: <Widget>[
+            new FirebaseAnimatedList(
+              query: reference,
+              sort: (a, b) => b.key.compareTo(a.key),
+              padding: new EdgeInsets.all(8.0),
+              reverse: false,
+              itemBuilder: (_, DataSnapshot snapshot,
+                  Animation<double> animation, int index) {
+                return new BlogRow(snapshot);
+              },
             ),
             new Divider(height: 1.0),
+            new Builder(
+              builder: (BuildContext context) {
+                return new FloatingActionButton(
+                  onPressed: () {
+                    Scaffold.of(context).showSnackBar(new SnackBar(
+                          content: new Text("Coming Soon!"),
+                        ));
+                  },
+                  child: new Icon(Icons.chat),
+                );
+              },
+            )
           ]),
         ));
     Scaffold loginScaffold = new Scaffold(
@@ -160,7 +175,7 @@ class HomePageState extends State<HomePage> {
         title: "SimpleBlogApp",
         routes: <String, WidgetBuilder>{
           "/profile": (BuildContext context) => new ProfilePage(),
-          "/post":(BuildContext context) => new PostBlogPage(),
+          "/post": (BuildContext context) => new PostBlogPage(),
         },
         home: loggedIn ? homeScaffold : loginScaffold);
   }
