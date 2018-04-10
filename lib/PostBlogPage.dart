@@ -202,12 +202,19 @@ class _PostPageState extends State<_PostPage> {
 //        new MaterialPageRoute(
 //            builder: (BuildContext context) => new HomePage()),
 //        (Route route) => route == null);
-    print("success");
+//    print("success");
     analytics.logEvent(name: 'post_blog');
     setState(() {
       _isLoading = false;
-      Navigator
-          .pop(context);
+      _title.clear();
+      _desc.clear();
+      _isTitle = false;
+      _isDesc = false;
+      _isImage = false;
+      _image = null;
     });
+    Scaffold.of(context).showSnackBar(new SnackBar(
+          content: new Text("Posted Successfully!"),
+        ));
   }
 }
