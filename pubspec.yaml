@@ -33,6 +33,7 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
+    - assets/img/signin.png
     - assets/img/addbutton.png
     - assets/img/img-placeholder.jpg
 

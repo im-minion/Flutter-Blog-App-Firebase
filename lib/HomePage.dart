@@ -164,14 +164,15 @@ class HomePageState extends State<HomePage> {
       body: new Center(
         child: _googleLoginProgress
             ? new CircularProgressIndicator()
-            : new RaisedButton(
-                onPressed: () {
+            : new InkWell(
+                child: new Image.asset("assets/img/signin.png",width: 200.0,),
+                onTap: () {
                   setState(() {
                     _googleLoginProgress = true;
                   });
                   checkStatusOfUser();
                 },
-                child: new Text("Google Sign in..")),
+              ),
       ),
     );
 
