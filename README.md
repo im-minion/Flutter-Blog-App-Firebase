@@ -1,8 +1,3 @@
 # flutter_blog_app
 
-A new Flutter application.
-
-## Getting Started
-
-For help getting started with Flutter, view our online
-[documentation](https://flutter.io/).
+![Demo](https://github.com/im-minion/Flutter-Blog-App/blob/master/gif_image.gif)
