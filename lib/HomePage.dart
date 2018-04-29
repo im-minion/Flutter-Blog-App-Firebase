@@ -86,7 +86,7 @@ class HomePageState extends State<HomePage> {
     //logout user
     SharedPreferences prefs;
     prefs = await SharedPreferences.getInstance();
-    await FirebaseAuth.instance.signOut();
+    await googleSignIn.signOut();
     prefs.clear();
     prefs.commit();
     this.setState(() {
